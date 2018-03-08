@@ -5,40 +5,41 @@ import * as force from 'd3-force';
 
 const SVG_WIDTH = 960;
 const SVG_HEIGHT = 960;
+const N_NODES = 100;
+const N_EDGES = 145;
+const R=5;
 
 const nodes = [];
 function addNode(x, y, r) {
   const nid = nodes.length;
-  const n = {x, y, r: r || 10, nid}
+  const n = {x, y, r: r || R, nid}
   nodes.push(n);
   return n;
 }
 
 const edges = [];
-function addEdge(n1, n2) {
+function addEdge(source, target) {
   const eid = edges.length;
-  const e = {n1, n2, eid};
+  const e = {source, target, eid};
   edges.push(e);
   return e;
 }
 
-for (let i=0; i<50; i++) {
+for (let i=0; i<N_NODES; i++) {
   addNode();
 }
-const n1 = addNode(20, 20);
-const n2 = addNode(45, 75);
-const n3 = addNode(100, 15);
-const n4 = addNode(110, 125);
 
-const e1 = addEdge(n1, n2);
-const e2 = addEdge(n1, n3);
-const e3 = addEdge(n1, n4);
-const e4 = addEdge(n2, n4);
+for (let i=0; i<N_EDGES; i++) {
+  const i0 = Math.floor(Math.random() * nodes.length);
+  const i1 = Math.floor(Math.random() * nodes.length);
+  addEdge(nodes[i0], nodes[i1]);
+}
 
 const simulation = force.forceSimulation(nodes)
   .force("charge", force.forceManyBody().strength(-80))
   .force("x", force.forceX(SVG_WIDTH/2))
   .force("y", force.forceY(SVG_HEIGHT/2))
+  .force("link", force.forceLink(edges))
   .stop();
 
 for (let i=0; i<300; i++) {
@@ -85,10 +86,10 @@ class Node extends Component {
 
 class Edge extends Component {
   render() {
-    const x1 = this.props.edge.n1.x;
-    const x2 = this.props.edge.n2.x;
-    const y1 = this.props.edge.n1.y;
-    const y2 = this.props.edge.n2.y;
+    const x1 = this.props.edge.source.x;
+    const x2 = this.props.edge.target.x;
+    const y1 = this.props.edge.source.y;
+    const y2 = this.props.edge.target.y;
     return (
       <line stroke="black" x1={x1} x2={x2} y1={y1} y2={y2} />
     )
