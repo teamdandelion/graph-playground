@@ -3,9 +3,9 @@ import logo from './logo.svg';
 import './App.css';
 
 const nodes = [];
-function addNode(cx, cy, r) {
+function addNode(x, y, r) {
   const nid = nodes.length;
-  const n = {cx, cy, r: r || 10, nid}
+  const n = {x, y, r: r || 10, nid}
   nodes.push(n);
   return n;
 }
@@ -41,8 +41,8 @@ class App extends Component {
 
 class GraphRenderer extends Component {
   render() {
-    const circles = this.props.nodes.map(x => <PrettyCircle cx={x.cx} cy={x.cy} r={x.r} />)
-    const edges = this.props.edges.map(x => <EdgeRenderer n1={x.n1} n2={x.n2} />)
+    const circles = this.props.nodes.map(x => <Node node={x}/>)
+    const edges = this.props.edges.map(x => <Edge edge={x}/>)
     return (
       <svg>
         {edges}
@@ -52,23 +52,26 @@ class GraphRenderer extends Component {
   }
 }
 
-class PrettyCircle extends Component {
+class Node extends Component {
   render() {
+    const cx = this.props.node.x;
+    const cy = this.props.node.y;
+    const r = this.props.node.r;
     return (
       <g>
-        <circle cx={this.props.cx} cy={this.props.cy} r={this.props.r} />
-        <circle cx={this.props.cx} cy={this.props.cy} r={this.props.r-2} fill="white" />
+        <circle cx={cx} cy={cy} r={r} />
+        <circle cx={cx} cy={cy} r={r-2} fill="white" />
       </g>
     )
   }
 }
 
-class EdgeRenderer extends Component {
+class Edge extends Component {
   render() {
-    const x1 = this.props.n1.cx;
-    const x2 = this.props.n2.cx;
-    const y1 = this.props.n1.cy;
-    const y2 = this.props.n2.cy;
+    const x1 = this.props.edge.n1.x;
+    const x2 = this.props.edge.n2.x;
+    const y1 = this.props.edge.n1.y;
+    const y2 = this.props.edge.n2.y;
     return (
       <line stroke="black" x1={x1} x2={x2} y1={y1} y2={y2} />
     )
