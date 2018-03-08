@@ -1,6 +1,10 @@
 import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
+import * as force from 'd3-force';
+
+const SVG_WIDTH = 960;
+const SVG_HEIGHT = 960;
 
 const nodes = [];
 function addNode(x, y, r) {
@@ -18,6 +22,9 @@ function addEdge(n1, n2) {
   return e;
 }
 
+for (let i=0; i<50; i++) {
+  addNode();
+}
 const n1 = addNode(20, 20);
 const n2 = addNode(45, 75);
 const n3 = addNode(100, 15);
@@ -27,6 +34,16 @@ const e1 = addEdge(n1, n2);
 const e2 = addEdge(n1, n3);
 const e3 = addEdge(n1, n4);
 const e4 = addEdge(n2, n4);
+
+const simulation = force.forceSimulation(nodes)
+  .force("charge", force.forceManyBody().strength(-80))
+  .force("x", force.forceX(SVG_WIDTH/2))
+  .force("y", force.forceY(SVG_HEIGHT/2))
+  .stop();
+
+for (let i=0; i<300; i++) {
+  simulation.tick();
+}
 
 class App extends Component {
   render() {
@@ -44,7 +61,7 @@ class GraphRenderer extends Component {
     const circles = this.props.nodes.map(x => <Node node={x}/>)
     const edges = this.props.edges.map(x => <Edge edge={x}/>)
     return (
-      <svg>
+      <svg width={SVG_WIDTH} height={SVG_HEIGHT}>
         {edges}
         {circles}
       </svg>
