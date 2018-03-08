@@ -5,8 +5,8 @@ import * as force from 'd3-force';
 
 const SVG_WIDTH = 960;
 const SVG_HEIGHT = 960;
-const N_NODES = 100;
-const N_EDGES = 145;
+const N_NODES = 200;
+const N_EDGES = 245;
 const R=5;
 
 
@@ -54,8 +54,8 @@ class GraphRenderer extends Component {
 
     this.simulation = force.forceSimulation(nodes)
       .force("charge", force.forceManyBody().strength(-80))
-      .force("x", force.forceX(SVG_WIDTH/2))
-      .force("y", force.forceY(SVG_HEIGHT/2))
+      .force("x", force.forceX())
+      .force("y", force.forceY())
       .force("link", force.forceLink(edges))
   }
 
@@ -81,8 +81,8 @@ class GraphRenderer extends Component {
 
 class Node extends Component {
   render() {
-    const cx = this.props.node.x;
-    const cy = this.props.node.y;
+    const cx = this.props.node.x + SVG_WIDTH/2;
+    const cy = this.props.node.y + SVG_HEIGHT/2;
     const r = this.props.node.r;
     return (
       <g>
@@ -95,10 +95,10 @@ class Node extends Component {
 
 class Edge extends Component {
   render() {
-    const x1 = this.props.edge.source.x;
-    const x2 = this.props.edge.target.x;
-    const y1 = this.props.edge.source.y;
-    const y2 = this.props.edge.target.y;
+    const x1 = this.props.edge.source.x + SVG_WIDTH/2;
+    const x2 = this.props.edge.target.x + SVG_WIDTH/2;
+    const y1 = this.props.edge.source.y + SVG_HEIGHT/2;
+    const y2 = this.props.edge.target.y + SVG_HEIGHT/2;
     return (
       <line stroke="black" x1={x1} x2={x2} y1={y1} y2={y2} />
     )
