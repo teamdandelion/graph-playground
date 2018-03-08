@@ -59,8 +59,8 @@ class App extends Component {
 
 class GraphRenderer extends Component {
   render() {
-    const circles = this.props.nodes.map(x => <Node node={x}/>)
-    const edges = this.props.edges.map(x => <Edge edge={x}/>)
+    const circles = this.props.nodes.map(x => <Node key={x.nid} node={x}/>)
+    const edges = this.props.edges.map(x => <Edge key={x.eid} edge={x}/>)
     return (
       <svg width={SVG_WIDTH} height={SVG_HEIGHT}>
         {edges}
