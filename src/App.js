@@ -9,48 +9,12 @@ const N_NODES = 100;
 const N_EDGES = 145;
 const R=5;
 
-const nodes = [];
-function addNode(x, y, r) {
-  const nid = nodes.length;
-  const n = {x, y, r: r || R, nid}
-  nodes.push(n);
-  return n;
-}
-
-const edges = [];
-function addEdge(source, target) {
-  const eid = edges.length;
-  const e = {source, target, eid};
-  edges.push(e);
-  return e;
-}
-
-for (let i=0; i<N_NODES; i++) {
-  addNode();
-}
-
-for (let i=0; i<N_EDGES; i++) {
-  const i0 = Math.floor(Math.random() * nodes.length);
-  const i1 = Math.floor(Math.random() * nodes.length);
-  addEdge(nodes[i0], nodes[i1]);
-}
-
-const simulation = force.forceSimulation(nodes)
-  .force("charge", force.forceManyBody().strength(-80))
-  .force("x", force.forceX(SVG_WIDTH/2))
-  .force("y", force.forceY(SVG_HEIGHT/2))
-  .force("link", force.forceLink(edges))
-  .stop();
-
-for (let i=0; i<300; i++) {
-  simulation.tick();
-}
 
 class App extends Component {
   render() {
     return (
       <div className="App">
-        <GraphRenderer nodes={nodes} edges={edges}/>
+        <GraphRenderer />
       </div>
     );
   }
@@ -58,9 +22,51 @@ class App extends Component {
 
 
 class GraphRenderer extends Component {
+  constructor(props) {
+    super(props);
+    const nodes = [];
+    function addNode(x, y, r) {
+      const nid = nodes.length;
+      const n = {x, y, r: r || R, nid}
+      nodes.push(n);
+      return n;
+    }
+
+    const edges = [];
+    function addEdge(source, target) {
+      const eid = edges.length;
+      const e = {source, target, eid};
+      edges.push(e);
+      return e;
+    }
+
+    for (let i=0; i<N_NODES; i++) {
+      addNode();
+    }
+
+    for (let i=0; i<N_EDGES; i++) {
+      const i0 = Math.floor(Math.random() * nodes.length);
+      const i1 = Math.floor(Math.random() * nodes.length);
+      addEdge(nodes[i0], nodes[i1]);
+    }
+
+    this.state = {nodes, edges};
+
+    const simulation = force.forceSimulation(nodes)
+      .force("charge", force.forceManyBody().strength(-80))
+      .force("x", force.forceX(SVG_WIDTH/2))
+      .force("y", force.forceY(SVG_HEIGHT/2))
+      .force("link", force.forceLink(edges))
+      .stop();
+
+    for (let i=0; i<300; i++) {
+      simulation.tick();
+    }
+
+  }
   render() {
-    const circles = this.props.nodes.map(x => <Node key={x.nid} node={x}/>)
-    const edges = this.props.edges.map(x => <Edge key={x.eid} edge={x}/>)
+    const circles = this.state.nodes.map(x => <Node key={x.nid} node={x}/>)
+    const edges = this.state.edges.map(x => <Edge key={x.eid} edge={x}/>)
     return (
       <svg width={SVG_WIDTH} height={SVG_HEIGHT}>
         {edges}
