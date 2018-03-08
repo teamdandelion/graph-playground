@@ -3,10 +3,18 @@ import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+  nodes() {
+    return [
+      {cx: 10, cy:10, r:5},
+      {cx: 32, cy: 8, r: 9},
+      {cx: 50, cy: 32, r:17}
+    ];
+  }
+
   render() {
     return (
       <div className="App">
-        <GraphRenderer />
+        <GraphRenderer nodes={this.nodes()}/>
       </div>
     );
   }
@@ -15,9 +23,10 @@ class App extends Component {
 
 class GraphRenderer extends Component {
   render() {
+    const circles = this.props.nodes.map(x => <PrettyCircle cx={x.cx} cy={x.cy} r={x.r} />)
     return (
       <svg>
-        <PrettyCircle cx="50" cy="50" r="30" />
+        {circles}
       </svg>
     )
   }
