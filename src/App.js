@@ -5,10 +5,9 @@ import * as force from 'd3-force';
 
 const SVG_WIDTH = 960;
 const SVG_HEIGHT = 960;
-const N_NODES = 200;
-const N_EDGES = 245;
-const R=5;
-
+const N_NODES = 35;
+const N_EDGES = 30;
+const R = 9;
 
 class App extends Component {
   render() {
@@ -19,7 +18,6 @@ class App extends Component {
     );
   }
 }
-
 
 class GraphRenderer extends Component {
   constructor(props) {
