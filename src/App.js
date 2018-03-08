@@ -17,8 +17,19 @@ class GraphRenderer extends Component {
   render() {
     return (
       <svg>
-        <circle cx="50" cy="50" r="30" />
+        <PrettyCircle cx="50" cy="50" r="30" />
       </svg>
+    )
+  }
+}
+
+class PrettyCircle extends Component {
+  render() {
+    return (
+      <g>
+        <circle cx={this.props.cx} cy={this.props.cy} r={this.props.r} />
+        <circle cx={this.props.cx} cy={this.props.cy} r={this.props.r-2} fill="white" />
+      </g>
     )
   }
 }
