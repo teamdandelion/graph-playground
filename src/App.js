@@ -52,18 +52,21 @@ class GraphRenderer extends Component {
 
     this.state = {nodes, edges};
 
-    const simulation = force.forceSimulation(nodes)
+    this.simulation = force.forceSimulation(nodes)
       .force("charge", force.forceManyBody().strength(-80))
       .force("x", force.forceX(SVG_WIDTH/2))
       .force("y", force.forceY(SVG_HEIGHT/2))
       .force("link", force.forceLink(edges))
-      .stop();
-
-    for (let i=0; i<300; i++) {
-      simulation.tick();
-    }
-
   }
+
+  componentDidMount() {
+    this.simulation.on("tick", () => this.tick());
+  }
+
+  tick() {
+    this.forceUpdate();
+  }
+
   render() {
     const circles = this.state.nodes.map(x => <Node key={x.nid} node={x}/>)
     const edges = this.state.edges.map(x => <Edge key={x.eid} edge={x}/>)
