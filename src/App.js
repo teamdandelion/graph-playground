@@ -3,10 +3,10 @@ import logo from './logo.svg';
 import './App.css';
 import * as force from 'd3-force';
 
-const SVG_WIDTH = 560;
-const SVG_HEIGHT = 560;
-const N_NODES = 50;
-const N_EDGES = 30;
+const SVG_WIDTH = 1560;
+const SVG_HEIGHT = 1560;
+const N_NODES = 300;
+const N_EDGES = 300;
 const R = 5;
 
 class App extends Component {
@@ -43,6 +43,11 @@ class GraphRenderer extends Component {
     }
   }
 
+  restart() {
+    this.simulation.alpha(1);
+    this.simulation.restart();
+  }
+
   addNode(x, y, r) {
     const nid = this.nodes.length;
     const n = {x, y, r: r || R, nid}
@@ -72,11 +77,20 @@ class GraphRenderer extends Component {
     this.forceUpdate();
   }
 
+  button() {
+    this.addNode();
+    this.addEdge();
+    this.addEdge();
+    this.simulation.alpha(1);
+    this.simulation.restart();
+  }
+
   render() {
     const nodeRenderers = this.state.nodes.map(x => <NodeRenderer key={x.nid} node={x}/>)
     const edgeRenderers = this.state.edges.map(x => <EdgeRenderer key={x.eid} edge={x}/>)
     return (
       <div>
+        <button style={{position: "absolute"}} onClick={() => this.button()}> Button </button>
         <svg width={SVG_WIDTH} height={SVG_HEIGHT}>
           <text y="35">n={nodeRenderers.length} e={edgeRenderers.length}</text>
           <g>{edgeRenderers}</g>
