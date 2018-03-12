@@ -3,11 +3,11 @@ import logo from './logo.svg';
 import './App.css';
 import * as force from 'd3-force';
 
-const SVG_WIDTH = 960;
-const SVG_HEIGHT = 960;
+const SVG_WIDTH = 560;
+const SVG_HEIGHT = 560;
 const N_NODES = 50;
 const N_EDGES = 30;
-const R = 9;
+const R = 5;
 
 class App extends Component {
   render() {
@@ -93,10 +93,7 @@ class NodeRenderer extends Component {
     const cy = this.props.node.y + SVG_HEIGHT/2;
     const r = this.props.node.r;
     return (
-      <g>
-        <circle cx={cx} cy={cy} r={r} />
-        <circle cx={cx} cy={cy} r={r-2} fill="white" />
-      </g>
+      <circle cx={cx} cy={cy} r={r} stroke="black" fill="white" />
     )
   }
 }
