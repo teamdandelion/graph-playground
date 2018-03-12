@@ -22,43 +22,48 @@ class App extends Component {
 class GraphRenderer extends Component {
   constructor(props) {
     super(props);
-    const nodes = [];
-    function addNode(x, y, r) {
-      const nid = nodes.length;
-      const n = {x, y, r: r || R, nid}
-      nodes.push(n);
-      return n;
-    }
+    this.nodes = [];
 
-    const edges = [];
-    function addEdge(source, target) {
-      const eid = edges.length;
-      const e = {source, target, eid};
-      edges.push(e);
-      return e;
-    }
+    this.edges = [];
 
     for (let i=0; i<N_NODES; i++) {
-      addNode();
+      this.addNode();
     }
 
     for (let i=0; i<N_EDGES; i++) {
-      const i0 = Math.floor(Math.random() * nodes.length);
-      const i1 = Math.floor(Math.random() * nodes.length);
-      addEdge(nodes[i0], nodes[i1]);
+      this.addEdge();
     }
 
-    this.state = {nodes, edges};
+    this.state = {nodes: this.nodes, edges: this.edges};
 
-    this.simulation = force.forceSimulation(nodes)
+    this.simulation = force.forceSimulation(this.nodes)
       .force("charge", force.forceManyBody().strength(-80))
       .force("x", force.forceX())
       .force("y", force.forceY())
-      .force("link", force.forceLink(edges))
+      .force("link", force.forceLink(this.edges))
+  }
+
+  addNode(x, y, r) {
+    const nid = this.nodes.length;
+    const n = {x, y, r: r || R, nid}
+    this.nodes.push(n);
+    return n;
+  }
+
+  addEdge(source, target) {
+    const i0 = Math.floor(Math.random() * this.nodes.length);
+    const i1 = Math.floor(Math.random() * this.nodes.length);
+    source = source || this.nodes[i0];
+    target = target || this.nodes[i1];
+    const eid = this.edges.length;
+    const e = {source, target, eid};
+    this.edges.push(e);
+    return e;
   }
 
   componentDidMount() {
     this.simulation.on("tick", () => this.tick());
+    window.renderer = this;
   }
 
   tick() {
