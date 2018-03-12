@@ -5,8 +5,8 @@ import * as force from 'd3-force';
 
 const SVG_WIDTH = 960;
 const SVG_HEIGHT = 960;
-const N_NODES = 35;
-const N_EDGES = 30;
+const N_NODES = 5;
+const N_EDGES = 3;
 const R = 9;
 
 class App extends Component {
@@ -26,6 +26,15 @@ class GraphRenderer extends Component {
 
     this.edges = [];
 
+    this.forceLink = force.forceLink(this.edges);
+    this.simulation = force.forceSimulation(this.nodes)
+      .force("charge", force.forceManyBody().strength(-80))
+      .force("x", force.forceX())
+      .force("y", force.forceY())
+      .force("link", this.forceLink);
+
+    this.state = {nodes: this.nodes, edges: this.edges};
+
     for (let i=0; i<N_NODES; i++) {
       this.addNode();
     }
@@ -33,20 +42,13 @@ class GraphRenderer extends Component {
     for (let i=0; i<N_EDGES; i++) {
       this.addEdge();
     }
-
-    this.state = {nodes: this.nodes, edges: this.edges};
-
-    this.simulation = force.forceSimulation(this.nodes)
-      .force("charge", force.forceManyBody().strength(-80))
-      .force("x", force.forceX())
-      .force("y", force.forceY())
-      .force("link", force.forceLink(this.edges))
   }
 
   addNode(x, y, r) {
     const nid = this.nodes.length;
     const n = {x, y, r: r || R, nid}
     this.nodes.push(n);
+    this.simulation.nodes(this.nodes);
     return n;
   }
 
@@ -58,12 +60,13 @@ class GraphRenderer extends Component {
     const eid = this.edges.length;
     const e = {source, target, eid};
     this.edges.push(e);
+    this.forceLink.links(this.edges);
     return e;
   }
 
   componentDidMount() {
     this.simulation.on("tick", () => this.tick());
-    window.renderer = this;
+    window.r = this;
   }
 
   tick() {
