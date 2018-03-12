@@ -69,10 +69,13 @@ class GraphRenderer extends Component {
     const circles = this.state.nodes.map(x => <Node key={x.nid} node={x}/>)
     const edges = this.state.edges.map(x => <Edge key={x.eid} edge={x}/>)
     return (
-      <svg width={SVG_WIDTH} height={SVG_HEIGHT}>
-        {edges}
-        {circles}
-      </svg>
+      <div>
+        <svg width={SVG_WIDTH} height={SVG_HEIGHT}>
+          <text y="35">n={circles.length} e={edges.length}</text>
+          <g>{edges}</g>
+          <g>{circles}</g>
+        </svg>
+      </div>
     )
   }
 }
