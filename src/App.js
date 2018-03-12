@@ -5,8 +5,8 @@ import * as force from 'd3-force';
 
 const SVG_WIDTH = 960;
 const SVG_HEIGHT = 960;
-const N_NODES = 5;
-const N_EDGES = 3;
+const N_NODES = 50;
+const N_EDGES = 30;
 const R = 9;
 
 class App extends Component {
@@ -23,7 +23,6 @@ class GraphRenderer extends Component {
   constructor(props) {
     super(props);
     this.nodes = [];
-
     this.edges = [];
 
     this.forceLink = force.forceLink(this.edges);
@@ -74,21 +73,21 @@ class GraphRenderer extends Component {
   }
 
   render() {
-    const nodes = this.state.nodes.map(x => <Node key={x.nid} node={x}/>)
-    const edges = this.state.edges.map(x => <Edge key={x.eid} edge={x}/>)
+    const nodeRenderers = this.state.nodes.map(x => <NodeRenderer key={x.nid} node={x}/>)
+    const edgeRenderers = this.state.edges.map(x => <EdgeRenderer key={x.eid} edge={x}/>)
     return (
       <div>
         <svg width={SVG_WIDTH} height={SVG_HEIGHT}>
-          <text y="35">n={nodes.length} e={edges.length}</text>
-          <g>{edges}</g>
-          <g>{nodes}</g>
+          <text y="35">n={nodeRenderers.length} e={edgeRenderers.length}</text>
+          <g>{edgeRenderers}</g>
+          <g>{nodeRenderers}</g>
         </svg>
       </div>
     )
   }
 }
 
-class Node extends Component {
+class NodeRenderer extends Component {
   render() {
     const cx = this.props.node.x + SVG_WIDTH/2;
     const cy = this.props.node.y + SVG_HEIGHT/2;
@@ -102,7 +101,7 @@ class Node extends Component {
   }
 }
 
-class Edge extends Component {
+class EdgeRenderer extends Component {
   render() {
     const x1 = this.props.edge.source.x + SVG_WIDTH/2;
     const x2 = this.props.edge.target.x + SVG_WIDTH/2;
